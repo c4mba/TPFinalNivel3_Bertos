@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,8 +45,12 @@
     <Compile Include="AccesoDatos.cs" />
     <Compile Include="NegocioArticulo.cs" />
     <Compile Include="NegocioCategoria.cs" />
+    <Compile Include="NegocioFavorito.cs" />
     <Compile Include="NegocioMarca.cs" />
+    <Compile Include="NegocioUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seguridad.cs" />
+    <Compile Include="Validacion.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dominio\dominio.csproj">

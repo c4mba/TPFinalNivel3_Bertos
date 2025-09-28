@@ -11,7 +11,7 @@ namespace negocio
 {
     public class NegocioArticulo
     {
-        public List<Articulo> listar()
+        public List<Articulo> listar(string id= "")
         {
             {
                 List<Articulo> lista = new List<Articulo>();
@@ -22,9 +22,11 @@ namespace negocio
 
                 try
                 {
-                    conexion.ConnectionString = "server=.\\SQLEXPRESS; database=CATALOGO_DB; integrated security=true";
+                    conexion.ConnectionString = "server=.\\SQLEXPRESS; database=CATALOGO_WEB_DB; integrated security=true";
                     comando.CommandType = System.Data.CommandType.Text;
-                    comando.CommandText = "select Codigo, Nombre, A.Descripcion, ImagenUrl, Precio, C.Descripcion Categoria, M.Descripcion Marca, A.IdCategoria, A.IdMarca, A.Id from ARTICULOS A, CATEGORIAS C, MARCAS M Where C.Id = A.IdCategoria And M.Id = A.IdMarca";
+                    comando.CommandText = "select Codigo, Nombre, A.Descripcion, ImagenUrl, Precio, C.Descripcion Categoria, M.Descripcion Marca, A.IdCategoria, A.IdMarca, A.Id from ARTICULOS A, CATEGORIAS C, MARCAS M Where C.Id = A.IdCategoria And M.Id = A.IdMarca ";
+                    if (id != "")
+                        comando.CommandText += " and A.Id = " + id;
                     comando.Connection = conexion;
 
                     conexion.Open();
@@ -58,6 +60,50 @@ namespace negocio
                     throw ex;
                 }
             }
+        }
+
+        public Articulo obtenerArticulo (int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            Articulo arti = null;
+
+            try
+            {
+                datos.setConsulta("SELECT A.Id, Codigo, Nombre, A.Descripcion, ImagenUrl, Precio, M.Descripcion Marca, C.Descripcion Categoria, A.IdCategoria, A.IdMarca from ARTICULOS A, CATEGORIAS C, MARCAS M Where A.Id = @id And C.Id = A.IdCategoria And M.Id = A.IdMarca ");
+                datos.setParametro("@Id", id);
+                datos.getConsulta();
+                if (datos.Lector.Read())
+                {
+                    arti = new Articulo
+                    {
+                        Id = (int)datos.Lector["Id"],
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        Descripcion = datos.Lector["Descripcion"].ToString(),
+                        Precio = (decimal)datos.Lector["Precio"],
+                        UrlImagen = datos.Lector["ImagenUrl"].ToString(),
+                        categoria = new Categoria
+                        {
+                            Id = (int)datos.Lector["IdCategoria"],
+                            Descripcion = datos.Lector["Categoria"].ToString()
+                        },
+                        marca = new Marca
+                        {
+                            Id = (int)datos.Lector["IdMarca"],
+                            Descripcion = datos.Lector["Marca"].ToString()
+                        }
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
+            }
+            return arti;
         }
 
         public void agregar(Articulo nuevo)
@@ -140,6 +186,8 @@ namespace negocio
                    campo.Equals("Categoria", StringComparison.OrdinalIgnoreCase) ? "C.Descripcion" :
                    throw new Exception("Campo invalido.");
         }
+
+       
 
         public List<Articulo> filtrar(string campo, string criterio, string filtro)
         {
@@ -345,6 +393,8 @@ namespace negocio
                 default: return "=";
             }
         }
+
+        
     }
  }
     
