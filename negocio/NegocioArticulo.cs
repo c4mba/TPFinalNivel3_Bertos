@@ -271,6 +271,8 @@ namespace negocio
             }
         }
 
+        
+
         private string completarConsulta(string campo, string criterio)
         {
             return $"{campo} LIKE @filtro";

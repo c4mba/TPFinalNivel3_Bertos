@@ -128,7 +128,7 @@
                     <div class="mb-3">
                         <asp:Label Text="Campo" ID="lblCampo" runat="server" />
                         <asp:DropDownList runat="server" AutoPostBack="true" CssClass="form-control" ID="ddl_Campo" OnSelectedIndexChanged="ddlCampo_SelectedIndexChanged">
-                            <asp:ListItem Text="" />
+                            <asp:ListItem Text="Selecciona una opción." />
                             <asp:ListItem Text="Nombre" />
                             <asp:ListItem Text="Precio" />
                             <asp:ListItem Text="Categoria" />
